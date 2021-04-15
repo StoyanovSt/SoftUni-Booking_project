@@ -1,18 +1,20 @@
+import { Link } from 'react-router-dom';
+
 const Header = () => {
 
     return (
         <nav>
             <div className="left-container">
                 <ul>
-                    <li><a href="">Home</a></li>
-                    <li><a href="">Add +</a></li>
-                    <li><a href="">Register</a></li>
-                    <li><a href="">Login</a></li>
+                    <li><Link to="/">Home</Link></li>
+                    <li><Link to="">Add +</Link></li>
+                    <li><Link to="/register">Register</Link></li>
+                    <li><Link to="/login">Login</Link></li>
                 </ul>
             </div>
             <div className="right-container">
-                <a href="" className="log-out">'User profile'</a>
-                <a href="" className="log-out">Logout</a>
+                <Link to="/user/profile" className="log-out">'User profile'</Link>
+                <Link to="/logout" className="log-out">Logout</Link>
             </div>
         </nav>
     );
