@@ -1,26 +1,25 @@
 import { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 
-import postUserDataToServer from './registerService.js';
+import loginUser from './loginService.js';
 import config from '../../config/config.js';
 
-const Register = () => {
+const Login = () => {
     const [redirect, setRedirect] = useState(false);
 
     const onClickHandler = (e) => {
         e.preventDefault();
 
-        const email = e.target.parentNode.email.value;
         const username = e.target.parentNode.username.value;
         const password = e.target.parentNode.password.value;
-        const rePassword = e.target.parentNode.rePassword.value;
 
-        postUserDataToServer(config.REG_USER_PATH, email, username, password, rePassword)
+        loginUser(config.LOG_USER_PATH, username, password)
             .then(response => response.json())
             .then(response => {
                 if (response.hasError) {
                     throw new Error(response.message);
                 } else {
+                    localStorage.setItem('user', JSON.stringify({ TOKEN: response.token, USERNAME: response.username }));
                     setRedirect(true);
                 }
             })
@@ -28,25 +27,21 @@ const Register = () => {
     }
 
     if (redirect) {
-        return <Redirect to="/login" />;
+        return <Redirect to="/" />;
     } else {
         return (
-            <section id="viewRegister">
-                <h2>Create your account:</h2>
-                <form id="formRegister">
-                    <label htmlFor="email">Email:</label>
-                    <input type="text" id="email" name="email" placeholder="Email" />
+            <section id="viewLogin">
+                <h2>Login:</h2>
+                <form id="formLogin">
                     <label htmlFor="username">Username:</label>
                     <input type="text" id="username" name="username" placeholder="Enter your Username" />
                     <label htmlFor="password">Password:</label>
-                    <input type="password" id="password" name="password" placeholder="Password" />
-                    <label htmlFor="rePassword">Repeat Password:</label>
-                    <input type="password" id="rePassword" name="rePassword" placeholder="Repeat Password" />
-                    <input onClick={(e) => onClickHandler(e)} type="submit" className="register" value="Register" />
+                    <input type="password" id="password" name="password" placeholder="Enter your Password" />
+                    <input onClick={(e) => onClickHandler(e)} type="submit" className="login" value="Login" />
                 </form>
             </section>
         );
     }
 }
 
-export default Register;
+export default Login;

@@ -52,8 +52,8 @@ router.post('/register', (req, res) => {
 
                                     })
                                     .catch(error => {
-                                        res.status(500).json({
-                                            message: 'Internal server error!',
+                                        res.status(409).json({
+                                            message: 'Invalid inputs!',
                                             hasError: true,
                                         });
                                     });
@@ -74,6 +74,65 @@ router.post('/register', (req, res) => {
             }
         })
         .catch(error => {
+            res.status(500).json({
+                message: 'Internal server error!',
+                hasError: true,
+            });
+        });
+
+});
+
+// Login
+router.post('/login', (req, res) => {
+    // get user data
+    const userData = req.body;
+
+    // check if such user exists in database
+    User.findOne({ username: userData.username })
+        .then(user => {
+            if (!user) {
+                res.status(404).json({
+                    message: 'Invalid username or password!',
+                    hasError: true,
+                });
+
+                return;
+            }
+
+            // check if passwords match
+            bcrypt.compare(userData.password, user.password)
+                .then(response => {
+                    if (!response) {
+                        res.status(409).json({
+                            message: 'Invalid username or password!',
+                            hasError: true,
+                        });
+
+                        return;
+                    }
+
+                    // generate jwt and send it to the client as json
+                    const token = jwt.sign({
+                        _id: user._id,
+                    }, config.SECRET);
+
+                    res.status(200).json({
+                        message: 'Successful logged in!',
+                        token: token,
+                        username: user.username,
+                        hasError: false,
+                    });
+
+                })
+                .catch(err => {
+                    res.status(500).json({
+                        message: 'Internal server error!',
+                        hasError: true,
+                    });
+                });
+
+        })
+        .catch(err => {
             res.status(500).json({
                 message: 'Internal server error!',
                 hasError: true,
