@@ -10,11 +10,13 @@ import Home from './components/Home/Home.js';
 import Register from './components/Register/Register.js';
 import Login from './components/Login/Login.js';
 import Logout from './components/Logout/Logout.js';
+import AddHotel from './components/AddHotel/AddHotel.js';
 
 import UserInfoContext from './contexts/UserInfoContext.js';
 
 function App() {
-    const [isLogged, setUserStatus] = useState(false);
+    let defaultStateValue = localStorage.getItem('user') ? true : false;
+    const [isLogged, setUserStatus] = useState(defaultStateValue);
 
     function onAuthChangeHandler() {
         setUserStatus(isLogged === false ? true : false);
@@ -24,6 +26,7 @@ function App() {
         < div className="site-wrapper" >
             <UserInfoContext.Provider value={{
                 isLogged,
+                token: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).TOKEN : '',
             }}>
                 <Header />
                 <Switch>
@@ -31,6 +34,7 @@ function App() {
                     <Route path="/register" exact component={Register} />
                     <Route path="/login" exact render={() => <Login onAuthChange={onAuthChangeHandler} />} />
                     <Route path="/logout" exact render={() => <Logout onAuthChange={onAuthChangeHandler} />} />
+                    <Route path="/hotel/add" exact component={AddHotel} />
                 </Switch>
                 <Footer />
             </UserInfoContext.Provider>

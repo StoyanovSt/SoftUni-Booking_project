@@ -1,9 +1,10 @@
 const router = require('express').Router();
 const User = require('./models/User');
+const Hotel = require('./models/Hotel');
 const bcrypt = require('bcrypt');
 const config = require('./config/config');
 const jwt = require('jsonwebtoken');
-// const isAuthorized = require('./middlewares/isAuthorized.js');
+const isAuthorized = require('./middlewares/isAuthorized.js');
 
 // AUTH-----------------------------
 // Register
@@ -139,6 +140,56 @@ router.post('/login', (req, res) => {
             });
         });
 
+});
+
+//----------------------------------------------------------------------------
+// Add reservation
+router.post('/hotel/add', isAuthorized, (req, res) => {
+    // get data
+    let { name, city, freeRooms, imageUrl } = req.body;
+
+    //validate data
+
+    // get user id
+    const userId = req.user._id;
+
+    // store in database
+    const newHotel = new Hotel({
+        name,
+        city,
+        freeRooms,
+        imageUrl,
+        owner: userId,
+    });
+
+
+    newHotel.save()
+        .then(hotel => {
+            User.findById(userId)
+                .then(user => {
+                    user.offeredHotels.push(hotel._id);
+                    return user.save();
+                })
+                .then(response => {
+                    res.status(201).json({
+                        message: 'Hotel successfully added!',
+                        hasError: false,
+                    });
+                })
+                .catch(err => {
+                    res.status(404).json({
+                        message: 'User not found!',
+                        hasError: true,
+                    });
+                });
+
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: 'Something went wrong! Failed to add hotel in database!',
+                hasError: true,
+            });
+        });
 });
 
 module.exports = router;
