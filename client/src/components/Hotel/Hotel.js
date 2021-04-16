@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
 
-const Hotel = () => {
+const Hotel = (props) => {    
     return (
         <Link to="" className="added-hotel">
-            <img src="" alt=""
+            <img src={props.imageUrl} alt=""
                 className="picture-added-hotel" />
-            <h3>Hilton Toronto</h3>
-            <span>Free rooms: </span>
+            <h3>{props.name} {props.city}</h3>
+            <span>Free rooms: {props.freeRooms}</span>
         </Link>
     );
 }
