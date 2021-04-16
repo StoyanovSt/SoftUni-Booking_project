@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 
 import loginUser from './loginService.js';
 import config from '../../config/config.js';
 
-const Login = () => {
+const Login = (props) => {
     const [redirect, setRedirect] = useState(false);
 
     const onClickHandler = (e) => {
@@ -20,6 +20,7 @@ const Login = () => {
                     throw new Error(response.message);
                 } else {
                     localStorage.setItem('user', JSON.stringify({ TOKEN: response.token, USERNAME: response.username }));
+                    props.onAuthChange();
                     setRedirect(true);
                 }
             })
