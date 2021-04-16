@@ -20,8 +20,6 @@ function App() {
         setUserStatus(isLogged === false ? true : false);
     }
 
-    console.log(isLogged);
-    
     return (
         < div className="site-wrapper" >
             <UserInfoContext.Provider value={{
