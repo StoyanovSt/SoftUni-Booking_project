@@ -1,43 +1,33 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect, useContext } from 'react';
+
+import UserInfoContext from '../../contexts/UserInfoContext.js';
+
+import Guest from './Guest/Guest.js';
+import Owner from './Owner/Owner.js';
 
 const HotelDetails = (props) => {
+    const { token } = useContext(UserInfoContext);
     const [currentHotelData, setCurrentHotelData] = useState({});
+    const [currentUserId, setCurrentUserId] = useState('');
 
     useEffect(() => {
-        fetch(`http://localhost:5000/hotel/${props.match.params.hotelId}/details`)
+        fetch(`http://localhost:5000/hotel/${props.match.params.hotelId}/details`, {
+            headers: {
+                'authorization': `${token}`,
+            },
+        })
             .then(res => res.json())
             .then(response => {
+                setCurrentUserId(response.currentLoggedUserId);
                 setCurrentHotelData(oldState => oldState = response.hotel);
             });
     }, []);
 
-    return (
-        <section id="viewhotelDetails">
-            <h2>Details</h2>
-            <div className="hotel-ticket">
-                <div className="hotel-left">
-                    <img src={currentHotelData.imageUrl}
-                        alt="" />
-                </div>
-                <div className="hotel-right">
-                    <div>
-                        <h3>{currentHotelData.name}</h3>
-                    </div>
-                    <div>
-                        {currentHotelData.city}
-                    </div>
-                    <p><span >Free rooms: {currentHotelData.freeRooms}</span> </p>
-                    <p><span className="green">You already have booked a room</span> </p>
-
-                    <Link to="" className="book">Book</Link>
-                    <Link to="" className="edit">Edit</Link>
-                    <Link to="" className="remove">Delete</Link>
-                </div>
-
-            </div>
-        </section>
-    );
+    if (currentUserId == currentHotelData.owner) {
+        return <Owner hotelData={currentHotelData}/>;
+    } else {
+        return <Guest hotelData={currentHotelData}/>;
+    }
 }
 
 export default HotelDetails;

@@ -213,7 +213,9 @@ router.post('/hotel/add', isAuthorized, (req, res) => {
 });
 
 // Hotel details page
-router.get('/hotel/:hotelId/details', (req, res) => {
+router.get('/hotel/:hotelId/details', isAuthorized, (req, res) => {
+    const currentLoggedUserId = req.user._id;
+
     // get hotel id
     const hotelId = req.params.hotelId;
 
@@ -222,6 +224,7 @@ router.get('/hotel/:hotelId/details', (req, res) => {
         .then(hotel => {
             res.status(200).json({
                 hotel,
+                currentLoggedUserId,
             });
         })
         .catch(err => {

@@ -5,7 +5,6 @@ module.exports = (req, res, next) => {
     // check if current user has jwt 
     if (req.headers.authorization) {
         const token = req.headers.authorization;
-        console.log(token);
 
         // verify jwt and throw an error if jwt not valid
         jwt.verify(token, config.SECRET, (err, decoded) => {
