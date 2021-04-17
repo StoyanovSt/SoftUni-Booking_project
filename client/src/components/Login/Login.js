@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 
 import loginUser from './loginService.js';

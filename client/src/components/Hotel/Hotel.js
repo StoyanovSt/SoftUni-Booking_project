@@ -7,7 +7,7 @@ const Hotel = (props) => {
     const {isLogged} =  useContext(UserInfoContext);
 
     return (
-        <Link to={isLogged === true ? `/hotel/hotelId/details` : '/login'} className="added-hotel">
+        <Link to={isLogged === true ? `/hotel/${props.id}/details` : '/login'} className="added-hotel">
             <img src={props.imageUrl} alt=""
                 className="picture-added-hotel" />
             <h3>{props.name} {props.city}</h3>

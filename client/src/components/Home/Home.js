@@ -39,6 +39,7 @@ const Home = () => {
                     {hotels.map(hotel => {
                         return <Hotel
                             key={hotel._id}
+                            id={hotel._id}
                             name={hotel.name}
                             city={hotel.city}
                             freeRooms={hotel.freeRooms}

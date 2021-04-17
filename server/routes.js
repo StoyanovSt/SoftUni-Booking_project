@@ -212,4 +212,25 @@ router.post('/hotel/add', isAuthorized, (req, res) => {
         });
 });
 
+// Hotel details page
+router.get('/hotel/:hotelId/details', (req, res) => {
+    // get hotel id
+    const hotelId = req.params.hotelId;
+
+    // get hotel by id from database
+    Hotel.findById(hotelId).lean()
+        .then(hotel => {
+            res.status(200).json({
+                hotel,
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: 'Internal server error!',
+                hasError: true,
+            });
+        });
+
+});
+
 module.exports = router;
