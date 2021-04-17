@@ -236,4 +236,25 @@ router.get('/hotel/:hotelId/details', isAuthorized, (req, res) => {
 
 });
 
+// Delete hotel
+router.get('/hotel/:hotelId/delete', isAuthorized, (req, res) => {
+    // get hotel id
+    const hotelId = req.params.hotelId;
+
+    // find it is database by id and delete it
+    Hotel.findByIdAndDelete(hotelId)
+        .then(response => {
+            res.status(200).json({
+                message: 'Successfully deleted!',
+                hasError: false,
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: 'Internal server error!',
+                hasError: true,
+            });
+        });
+});
+
 module.exports = router;

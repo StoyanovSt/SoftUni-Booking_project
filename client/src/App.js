@@ -11,6 +11,7 @@ import Login from './components/Login/Login.js';
 import Logout from './components/Logout/Logout.js';
 import AddHotel from './components/AddHotel/AddHotel.js';
 import HotelDetails from './components/HotelDetails/HotelDetails.js';
+import DeleteHotel from './components/DeleteHotel/DeleteHotel.js';
 
 import UserInfoContext from './contexts/UserInfoContext.js';
 
@@ -36,6 +37,7 @@ function App() {
                     <Route path="/logout" exact render={() => <Logout onAuthChange={onAuthChangeHandler} />} />
                     <Route path="/hotel/add" exact component={AddHotel} />
                     <Route path="/hotel/:hotelId/details" exact component={HotelDetails} />
+                    <Route path="/hotel/:hotelId/delete" exact component={DeleteHotel} />
 
                 </Switch>
                 <Footer />
