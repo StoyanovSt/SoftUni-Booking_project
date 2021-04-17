@@ -8,7 +8,8 @@ import Owner from './Owner/Owner.js';
 const HotelDetails = (props) => {
     const { token } = useContext(UserInfoContext);
     const [currentHotelData, setCurrentHotelData] = useState({});
-    const [currentUserId, setCurrentUserId] = useState('');
+    const [currentUserId, setCurrentUserId] = useState('');    
+    const [isCurrentUserHasAlreadyBookedARoomInThisHotel, setIsCurrentUserHasAlreadyBookedARoomInThisHotel] = useState(false);    
 
     useEffect(() => {
         fetch(`http://localhost:5000/hotel/${props.match.params.hotelId}/details`, {
@@ -20,13 +21,23 @@ const HotelDetails = (props) => {
             .then(response => {
                 setCurrentUserId(response.currentLoggedUserId);
                 setCurrentHotelData(oldState => oldState = response.hotel);
+
+                if (response.hotel.usersBookedARoom.includes(response.currentLoggedUserId)) {
+                    setIsCurrentUserHasAlreadyBookedARoomInThisHotel(true);
+                } else {
+                    setIsCurrentUserHasAlreadyBookedARoomInThisHotel(false);
+                }
+
             });
     }, []);
 
     if (currentUserId == currentHotelData.owner) {
-        return <Owner hotelData={currentHotelData}/>;
+        return <Owner hotelData={currentHotelData} />;
     } else {
-        return <Guest hotelData={currentHotelData}/>;
+        return <Guest
+            isCurrentUserHasAlreadyBookedARoomInThisHotel={isCurrentUserHasAlreadyBookedARoomInThisHotel}
+            hotelData={currentHotelData}
+        />;
     }
 }
 

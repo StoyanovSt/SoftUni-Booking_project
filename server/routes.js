@@ -257,4 +257,34 @@ router.get('/hotel/:hotelId/delete', isAuthorized, (req, res) => {
         });
 });
 
+// Book hotel
+router.get('/hotel/:hotelId/book', isAuthorized, (req, res) => {
+    const currentLoggedUserId = req.user._id;
+
+    // get hotel id
+    const hotelId = req.params.hotelId;
+
+    Hotel.findById(hotelId).lean()
+        .then(hotel => {
+            Hotel.updateOne({ _id: hotelId }, { freeRooms: hotel.freeRooms - 1 })
+                .then(response => {
+                    return Hotel.updateOne({ _id: hotelId }, { $push: { usersBookedARoom: currentLoggedUserId } })
+                })
+                .then(response => {
+                    res.status(200).json({
+                        message: 'A room has been booked',
+                        hasError: false,
+                    });
+                })
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: 'Internal server error!',
+                hasError: true,
+            });
+        });
+})
+
+//-----------------------------------
+
 module.exports = router;
