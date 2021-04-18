@@ -311,14 +311,32 @@ router.get('/hotel/:hotelId/book', isAuthorized, (req, res) => {
         .then(hotel => {
             Hotel.updateOne({ _id: hotelId }, { freeRooms: hotel.freeRooms - 1 })
                 .then(response => {
-                    return Hotel.updateOne({ _id: hotelId }, { $push: { usersBookedARoom: currentLoggedUserId } })
-                })
+                return Hotel.updateOne({ _id: hotelId }, { $push: { usersBookedARoom: currentLoggedUserId } });
+            })
                 .then(response => {
-                    res.status(200).json({
-                        message: 'A room has been booked',
-                        hasError: false,
-                    });
+                    User.findById(currentLoggedUserId).lean()
+                        .then(user => {
+                            return User.updateOne({ _id: currentLoggedUserId }, { $push: { bookedHotels: hotelId } });
+                        })
+                        .then(response => {
+                            res.status(200).json({
+                                message: 'A room has been booked',
+                                hasError: false,
+                            });
+                        })
+                        .catch(err => {
+                            res.status(500).json({
+                                message: 'Internal server error!',
+                                hasError: true,
+                            });
+                        });
                 })
+                .catch(err => {
+                    res.status(500).json({
+                        message: 'Internal server error!',
+                        hasError: true,
+                    });
+                });
         })
         .catch(err => {
             res.status(500).json({
@@ -407,6 +425,30 @@ router.post('/hotel/:hotelId/edit', isAuthorized, (req, res) => {
                 hasError: true,
             });
         })
+});
+
+// User profile page
+router.get('/user/profile', isAuthorized, (req, res) => {
+    // get current user by id
+    const currentLoggedUserId = req.user._id;
+
+    User.findById(currentLoggedUserId)
+        .populate('bookedHotels')
+        .then(userInfo => {
+            res.status(200).json({
+                username: userInfo.username,
+                userEmail: userInfo.email,
+                userReservations: userInfo.bookedHotels,
+                hasError: false,
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: 'Internal server error!',
+                hasError: true,
+            });
+        });
+
 });
 
 //-----------------------------------

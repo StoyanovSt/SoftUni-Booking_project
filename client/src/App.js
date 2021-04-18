@@ -14,6 +14,7 @@ import HotelDetails from './components/HotelDetails/HotelDetails.js';
 import DeleteHotel from './components/DeleteHotel/DeleteHotel.js';
 import BookARoom from './components/BookARoom/BookARoom.js';
 import EditHotel from './components/EditHotel/EditHotel.js';
+import UserProfile from './components/UserProfile/UserProfile.js';
 
 import UserInfoContext from './contexts/UserInfoContext.js';
 
@@ -30,6 +31,7 @@ function App() {
             <UserInfoContext.Provider value={{
                 isLogged,
                 token: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).TOKEN : '',
+                username: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).USERNAME : '',
             }}>
                 <Header />
                 <Switch>
@@ -42,6 +44,7 @@ function App() {
                     <Route path="/hotel/:hotelId/delete" exact component={DeleteHotel} />
                     <Route path="/hotel/:hotelId/book" exact component={BookARoom} />
                     <Route path="/hotel/:hotelId/edit" exact component={EditHotel} />
+                    <Route path="/user/profile" exact component={UserProfile} />
                 </Switch>
                 <Footer />
             </UserInfoContext.Provider>

@@ -4,8 +4,7 @@ import { useContext } from 'react';
 import UserInfoContext from '../../contexts/UserInfoContext.js';
 
 const Header = () => {
-    const { isLogged } = useContext(UserInfoContext);
-    const username = isLogged === true ? JSON.parse(localStorage.getItem('user')).USERNAME : '';
+    const { isLogged, username } = useContext(UserInfoContext);
 
     if (isLogged) {
         return (
