@@ -285,6 +285,59 @@ router.get('/hotel/:hotelId/book', isAuthorized, (req, res) => {
         });
 })
 
+// Edit hotel
+router.get('/hotel/:hotelId/edit', isAuthorized, (req, res) => {
+    // get hotel id
+    const hotelId = req.params.hotelId;
+
+    // get hotel by id from database
+    Hotel.findById(hotelId).lean()
+        .then(hotel => {
+            res.status(200).json({
+                hotel,
+                hasError: false,
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: 'Internal server error!',
+                hasError: true,
+            });
+        });
+});
+
+router.post('/hotel/:hotelId/edit', isAuthorized, (req, res) => {
+    // get editted data
+    const { hotelName, city, freeRooms, imageUrl } = req.body;
+
+    // get product id
+    const hotelId = req.params.hotelId;
+
+    // find one and update multiple
+    Hotel.updateOne({ _id: hotelId }, { name: hotelName })
+        .then(response => {
+            return Hotel.updateOne({ _id: hotelId }, { city: city });
+        })
+        .then(response => {
+            return Hotel.updateOne({ _id: hotelId }, { freeRooms: freeRooms });
+        })
+        .then(response => {
+            return Hotel.updateOne({ _id: hotelId }, { imageUrl: imageUrl });
+        })
+        .then(response => {
+            res.status(200).json({
+                hasError: false,
+                message: 'Hotel has been successfully eddited!',
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: 'Internal server error!',
+                hasError: true,
+            });
+        })
+});
+
 //-----------------------------------
 
 module.exports = router;

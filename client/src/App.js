@@ -13,6 +13,7 @@ import AddHotel from './components/AddHotel/AddHotel.js';
 import HotelDetails from './components/HotelDetails/HotelDetails.js';
 import DeleteHotel from './components/DeleteHotel/DeleteHotel.js';
 import BookARoom from './components/BookARoom/BookARoom.js';
+import EditHotel from './components/EditHotel/EditHotel.js';
 
 import UserInfoContext from './contexts/UserInfoContext.js';
 
@@ -40,7 +41,7 @@ function App() {
                     <Route path="/hotel/:hotelId/details" exact component={HotelDetails} />
                     <Route path="/hotel/:hotelId/delete" exact component={DeleteHotel} />
                     <Route path="/hotel/:hotelId/book" exact component={BookARoom} />
-
+                    <Route path="/hotel/:hotelId/edit" exact component={EditHotel} />
                 </Switch>
                 <Footer />
             </UserInfoContext.Provider>

@@ -18,7 +18,7 @@ const Owner = (props) => {
                     </div>
                     <p><span >Free rooms: {props.hotelData.freeRooms}</span> </p>
 
-                    <Link to="" className="edit">Edit</Link>
+                    <Link to={`/hotel/${props.hotelData._id}/edit`} className="edit">Edit</Link>
                     <Link to={`/hotel/${props.hotelData._id}/delete`} className="remove">Delete</Link>
                 </div>
 
