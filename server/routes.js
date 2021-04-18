@@ -33,6 +33,23 @@ router.post('/register', (req, res) => {
     const userData = req.body;
 
     // validate data
+    if (!userData.email.match(config.EMAIL_VALIDATION_PATTERN)) {
+        res.status(409).json({
+            message: 'Email must be a valid e-mail and may contains only english letters and digits!',
+            hasError: true,
+        });
+
+        return;
+    }
+
+    if (!userData.password.match(config.PASSWORD_VALIDATION_PATTERN)) {
+        res.status(409).json({
+            message: 'Password must be atleast five characters long and may contains only english letters and digits!',
+            hasError: true,
+        });
+
+        return;
+    }
 
     // chech if such user exists in database
     User.findOne({ username: userData.username })
@@ -169,6 +186,32 @@ router.post('/hotel/add', isAuthorized, (req, res) => {
     let { name, city, freeRooms, imageUrl } = req.body;
 
     //validate data
+    if (name.length < 4) {
+        res.status(409).json({
+            message: 'Hotel name must be atleast 4 symbols!',
+            hasError: true,
+        });
+
+        return;
+    }
+
+    if (city.length < 3) {
+        res.status(409).json({
+            message: 'City name must be atleast 3 symbols!',
+            hasError: true,
+        });
+
+        return;
+    }
+
+    if (!imageUrl.startsWith('http') || !imageUrl.startsWith('https')) {
+        res.status(409).json({
+            message: 'ImageUrl shoud start with http or https!',
+            hasError: true,
+        });
+
+        return;
+    }
 
     // get user id
     const userId = req.user._id;
@@ -309,6 +352,34 @@ router.get('/hotel/:hotelId/edit', isAuthorized, (req, res) => {
 router.post('/hotel/:hotelId/edit', isAuthorized, (req, res) => {
     // get editted data
     const { hotelName, city, freeRooms, imageUrl } = req.body;
+
+    // validate data
+    if (hotelName.length < 4) {
+        res.status(409).json({
+            message: 'Hotel name must be atleast 4 symbols!',
+            hasError: true,
+        });
+
+        return;
+    }
+
+    if (city.length < 3) {
+        res.status(409).json({
+            message: 'City name must be atleast 3 symbols!',
+            hasError: true,
+        });
+
+        return;
+    }
+
+    if (!imageUrl.startsWith('http') || !imageUrl.startsWith('https')) {
+        res.status(409).json({
+            message: 'ImageUrl shoud start with http or https!',
+            hasError: true,
+        });
+
+        return;
+    }
 
     // get product id
     const hotelId = req.params.hotelId;
