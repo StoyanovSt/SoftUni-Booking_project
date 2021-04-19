@@ -3,8 +3,8 @@ import { useContext } from 'react';
 
 import UserInfoContext from '../../contexts/UserInfoContext.js';
 
-const Hotel = (props) => {  
-    const {isLogged} =  useContext(UserInfoContext);
+const Hotel = (props) => {
+    const { isLogged } = useContext(UserInfoContext);
 
     return (
         <Link to={isLogged === true ? `/hotel/${props.id}/details` : '/login'} className="added-hotel">
