@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const User = require('./models/User');
-const isAuthorized = require('./middlewares/isAuthorized.js');
+const User = require('../models/User');
+const isAuthorized = require('../middlewares/isAuthorized.js');
 
 router.get('/user/profile', isAuthorized, (req, res) => {
     // get current user by id

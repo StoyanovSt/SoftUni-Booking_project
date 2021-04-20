@@ -1,7 +1,7 @@
 const router = require('express').Router();
-const User = require('./models/User');
-const Hotel = require('./models/Hotel');
-const isAuthorized = require('./middlewares/isAuthorized.js');
+const User = require('../models/User');
+const Hotel = require('../models/Hotel');
+const isAuthorized = require('../middlewares/isAuthorized.js');
 
 // Add hotel
 router.post('/hotel/add', isAuthorized, (req, res) => {

@@ -1,7 +1,7 @@
 const router = require('express').Router();
-const User = require('./models/User');
+const User = require('../models/User');
 const bcrypt = require('bcrypt');
-const config = require('./config/config');
+const config = require('../config/config');
 const jwt = require('jsonwebtoken');
 
 router.post('/register', (req, res) => {
@@ -96,7 +96,6 @@ router.post('/register', (req, res) => {
 
 });
 
-// Login
 router.post('/login', (req, res) => {
     // get user data
     const userData = req.body;

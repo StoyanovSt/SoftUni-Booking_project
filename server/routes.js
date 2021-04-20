@@ -1,9 +1,9 @@
 const router = require('express').Router();
 
-const homeController = require('./homeRoutes.js');
-const authController = require('./authRoutes.js');
-const hotelController = require('./hotelRoutes.js');
-const userPagesController = require('./userRoutes.js');
+const homeController = require('./controllers/homeRoutes.js');
+const authController = require('./controllers/authRoutes.js');
+const hotelController = require('./controllers/hotelRoutes.js');
+const userPagesController = require('./controllers/userRoutes.js');
 
 router.use(homeController);
 router.use(authController);
